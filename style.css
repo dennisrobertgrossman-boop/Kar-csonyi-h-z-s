@@ -88,9 +88,6 @@ input::placeholder{color:rgba(138,143,181,.45)}
 .r-name{margin:0; font-size:clamp(2.4rem,11vw,4.6rem); font-weight:800; letter-spacing:.05em; text-transform:uppercase; line-height:1.15; word-break:break-word}
 .r-hint{margin:6px 0 4px; color:var(--dim); font-size:.9rem}
 
-.rules{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:26px auto 0; max-width:760px}
-.chip{display:flex; gap:12px; align-items:center; padding:12px 14px; border-left:3px solid var(--pink); background:rgba(255,255,255,.03); font-size:.9rem; color:var(--dim)}
-.chip b{color:var(--pink); font-size:1.3rem; text-shadow:0 0 10px var(--pink)}
 
 /* wishlists */
 .wishes{margin-top:60px}
