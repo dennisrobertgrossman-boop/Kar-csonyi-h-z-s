@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neon Noël – Karácsonyi sorsolás</title>
+  <meta name="description" content="Family Christmas gift draw – enter your personal code.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2307060f'/%3E%3Cpath d='M32 8 L50 30 H40 L52 46 H12 L24 30 H14 Z' fill='none' stroke='%2300f0ff' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="floor" aria-hidden="true"></div>
+
+  <button id="lang" class="lang" type="button" aria-label="Language / Nyelv">EN</button>
+
+  <header class="hero">
+    <svg class="tree" viewBox="0 0 120 150" aria-hidden="true">
+      <polygon class="t1" points="60,8 84,48 70,48 96,88 78,88 108,128 12,128 42,88 24,88 50,48 36,48"/>
+      <rect class="t2" x="52" y="128" width="16" height="14"/>
+      <circle class="b b1" cx="60" cy="30" r="3.2"/>
+      <circle class="b b2" cx="48" cy="70" r="3.2"/>
+      <circle class="b b3" cx="74" cy="92" r="3.2"/>
+      <circle class="b b4" cx="40" cy="112" r="3.2"/>
+      <circle class="b b5" cx="82" cy="116" r="3.2"/>
+    </svg>
+    <p class="kicker" data-i18n="kicker">// NEON NOËL PROTOCOL</p>
+    <h1 class="glitch" data-text="NEON NOËL" id="title">NEON NOËL</h1>
+    <p class="sub" data-i18n="sub">Family gift draw · <span id="year"></span></p>
+  </header>
+
+  <main>
+    <section class="panel terminal" aria-labelledby="t-head">
+      <div class="panel-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="bar-title" id="t-head" data-i18n="barTitle">secure_terminal.exe</span></div>
+      <form id="form" autocomplete="off" novalidate>
+        <label for="code" data-i18n="label">ENTER YOUR PERSONAL CODE</label>
+        <div class="row">
+          <span class="prompt" aria-hidden="true">&gt;_</span>
+          <input id="code" name="code" type="text" inputmode="text" maxlength="12" spellcheck="false"
+                 autocapitalize="characters" autocorrect="off" placeholder="XXXX-XXXX" required>
+        </div>
+        <button id="go" class="btn" type="submit"><span data-i18n="btn">DECRYPT</span></button>
+        <p id="msg" class="msg" role="status" aria-live="polite"></p>
+      </form>
+
+      <div id="result" class="result" hidden>
+        <p class="r-label" data-i18n="rLabel">TARGET ACQUIRED — YOU BUY A GIFT FOR</p>
+        <p class="r-name glitch" id="rname" data-text="">&nbsp;</p>
+        <p class="r-hint" id="rhint"></p>
+        <button id="hide" class="btn ghost" type="button" data-i18n="hide">HIDE · CLEAR SCREEN</button>
+      </div>
+    </section>
+
+    <section class="rules" aria-label="Rules">
+      <div class="chip"><b>01</b><span data-i18n="r1">Everyone draws exactly one name.</span></div>
+      <div class="chip"><b>02</b><span data-i18n="r2">Everyone is drawn exactly once.</span></div>
+      <div class="chip"><b>03</b><span data-i18n="r3">Nobody draws themselves.</span></div>
+    </section>
+
+    <section class="wishes" aria-labelledby="w-head">
+      <h2 id="w-head" class="h2"><span data-i18n="wTitle">WISHLISTS</span></h2>
+      <p class="w-sub" data-i18n="wSub">Stuck for ideas? Check what everyone is hoping for.</p>
+      <div id="wgrid" class="grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="foot">Codes are secret. Don’t share yours — and don’t peek at anyone else’s.</span>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
