@@ -155,7 +155,7 @@
   (function rain() {
     if (reduce) return;
     const cv = $('rain'), cx = cv.getContext('2d'); let w, h, cols, drops;
-    const chars = '❄❅❆*+·0123456789';
+    const chars = '*+·0123456789'.split('').concat(['\u2744\uFE0E', '\u2745\uFE0E', '\u2746\uFE0E']);
     let lastW = 0;
     function size() {
       if (innerWidth === lastW && drops) return; lastW = innerWidth;

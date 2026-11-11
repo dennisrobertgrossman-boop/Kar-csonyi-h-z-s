@@ -2,7 +2,9 @@
 <html lang="hu">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="format-detection" content="telephone=no">
   <title>Neon Noël – Karácsonyi sorsolás</title>
   <meta name="description" content="Family Christmas gift draw – enter your personal code.">
   <meta name="robots" content="noindex, nofollow">
@@ -43,7 +45,7 @@
         <div class="row">
           <span class="prompt" aria-hidden="true">&gt;_</span>
           <input id="code" name="code" type="text" inputmode="text" maxlength="24" spellcheck="false"
-                 autocapitalize="characters" autocorrect="off" placeholder="XXXX-XXXX" required>
+                 autocapitalize="characters" autocorrect="off" autocomplete="off" enterkeyhint="go" aria-describedby="msg" placeholder="XXXX-XXXX" required>
         </div>
         <button id="go" class="btn" type="submit"><span data-i18n="btn">DECRYPT</span></button>
         <p id="msg" class="msg" role="status" aria-live="polite"></p>
