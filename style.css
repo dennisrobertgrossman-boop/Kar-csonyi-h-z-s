@@ -1,0 +1,114 @@
+:root{
+  --bg:#07060f; --bg2:#0e0b1f; --ink:#e9f1ff; --dim:#8a8fb5;
+  --cyan:#00f0ff; --pink:#ff2bd6; --yellow:#fcee0a; --green:#39ff88; --red:#ff3860;
+  --font:"Segoe UI","Segoe UI Variable",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; color:var(--ink); font-family:var(--font); line-height:1.5;
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(255,43,214,.20), transparent 60%),
+    radial-gradient(900px 600px at 95% 5%, rgba(0,240,255,.16), transparent 60%),
+    linear-gradient(var(--bg2), var(--bg));
+  background-color:var(--bg); overflow-x:hidden; padding:0 16px 40px;
+}
+#rain{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:.55}
+.scanlines{position:fixed; inset:0; z-index:5; pointer-events:none;
+  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.035) 0 1px, transparent 1px 3px); mix-blend-mode:overlay}
+.scanlines::after{content:""; position:absolute; inset:0;
+  background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55))}
+.floor{position:fixed; left:-50%; right:-50%; bottom:0; height:42vh; z-index:0; pointer-events:none;
+  background:
+    linear-gradient(to bottom, transparent, rgba(255,43,214,.12)),
+    repeating-linear-gradient(90deg, rgba(0,240,255,.35) 0 1px, transparent 1px 70px),
+    repeating-linear-gradient(0deg, rgba(0,240,255,.35) 0 1px, transparent 1px 50px);
+  transform:perspective(380px) rotateX(62deg); transform-origin:bottom;
+  -webkit-mask-image:linear-gradient(to top, #000 10%, transparent 90%); mask-image:linear-gradient(to top,#000 10%,transparent 90%);
+  animation:floor 3s linear infinite}
+@keyframes floor{to{background-position:0 0, 0 0, 0 50px}}
+
+.lang{position:fixed; top:14px; right:14px; z-index:10; background:rgba(7,6,15,.7); color:var(--cyan);
+  border:1px solid var(--cyan); padding:6px 12px; font:600 .8rem var(--font); letter-spacing:.15em; cursor:pointer;
+  clip-path:polygon(0 0,100% 0,100% 70%,85% 100%,0 100%)}
+.lang:hover,.lang:focus-visible{background:var(--cyan); color:#000; outline:none}
+
+main,.hero,footer{position:relative; z-index:2; max-width:920px; margin:0 auto}
+.hero{text-align:center; padding:56px 0 18px}
+.tree{width:92px; height:auto; filter:drop-shadow(0 0 8px var(--cyan)) drop-shadow(0 0 18px rgba(0,240,255,.6))}
+.tree .t1{fill:rgba(0,240,255,.06); stroke:var(--cyan); stroke-width:2.5; stroke-linejoin:round}
+.tree .t2{fill:none; stroke:var(--pink); stroke-width:2.5}
+.tree .b{fill:var(--yellow); filter:drop-shadow(0 0 4px var(--yellow)); animation:blink 1.6s infinite}
+.tree .b2{fill:var(--pink); animation-delay:.3s}.tree .b3{fill:var(--green); animation-delay:.6s}
+.tree .b4{fill:var(--cyan); animation-delay:.9s}.tree .b5{fill:var(--pink); animation-delay:1.2s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.kicker{margin:10px 0 0; color:var(--pink); letter-spacing:.35em; font-size:.8rem; font-weight:600; text-shadow:0 0 8px var(--pink)}
+h1{margin:.1em 0 .05em; font-size:clamp(2.4rem,9vw,5rem); font-weight:800; letter-spacing:.06em; line-height:1.05; text-transform:uppercase}
+.sub{margin:0; color:var(--dim); letter-spacing:.2em; text-transform:uppercase; font-size:.85rem}
+
+/* glitch text */
+.glitch{position:relative; color:#fff; text-shadow:0 0 12px var(--cyan),0 0 32px rgba(0,240,255,.6)}
+.glitch::before,.glitch::after{content:attr(data-text); position:absolute; inset:0; overflow:hidden; pointer-events:none}
+.glitch::before{color:var(--pink); text-shadow:none; transform:translate(2px,0); clip-path:inset(0 0 60% 0); opacity:0; animation:g1 3.2s infinite steps(1)}
+.glitch::after{color:var(--cyan); text-shadow:none; transform:translate(-2px,0); clip-path:inset(60% 0 0 0); opacity:0; animation:g2 2.7s infinite steps(1)}
+@keyframes g1{0%,88%,100%{transform:translate(0); opacity:0}90%{opacity:.9;transform:translate(-4px,1px); clip-path:inset(10% 0 55% 0)}94%{opacity:.9; transform:translate(4px,-1px); clip-path:inset(40% 0 20% 0)}96%{opacity:0}}
+@keyframes g2{0%,80%,100%{transform:translate(0); opacity:0}83%{opacity:.9;transform:translate(4px,-1px); clip-path:inset(55% 0 5% 0)}90%{opacity:.9; transform:translate(-4px,1px); clip-path:inset(20% 0 50% 0)}93%{opacity:0}}
+
+/* panel */
+.panel{position:relative; margin:22px auto 0; max-width:620px; background:rgba(10,8,26,.82);
+  border:1px solid var(--cyan); box-shadow:0 0 0 1px rgba(0,240,255,.15),0 0 30px rgba(0,240,255,.25), inset 0 0 40px rgba(0,240,255,.05);
+  clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)); backdrop-filter:blur(4px)}
+.panel-bar{display:flex; align-items:center; gap:7px; padding:9px 14px; background:linear-gradient(90deg,rgba(0,240,255,.2),rgba(255,43,214,.15)); border-bottom:1px solid rgba(0,240,255,.4)}
+.dot{width:9px; height:9px; border-radius:50%; background:var(--pink); box-shadow:0 0 6px var(--pink)}
+.dot:nth-child(2){background:var(--yellow); box-shadow:0 0 6px var(--yellow)}.dot:nth-child(3){background:var(--green); box-shadow:0 0 6px var(--green)}
+.bar-title{margin-left:8px; font-size:.78rem; color:var(--cyan); letter-spacing:.12em}
+form{padding:24px 22px 20px}
+label{display:block; font-size:.78rem; font-weight:600; letter-spacing:.2em; color:var(--yellow); margin-bottom:10px; text-shadow:0 0 6px rgba(252,238,10,.5)}
+.row{display:flex; align-items:center; gap:10px; border:1px solid var(--pink); background:rgba(0,0,0,.45); padding:0 14px; box-shadow:0 0 14px rgba(255,43,214,.25)}
+.row:focus-within{box-shadow:0 0 22px rgba(255,43,214,.6); border-color:#fff}
+.prompt{color:var(--green); font-weight:700; text-shadow:0 0 8px var(--green)}
+input{flex:1; min-width:0; background:none; border:0; outline:0; color:#fff; font:600 clamp(1.3rem,5vw,1.8rem) var(--font); letter-spacing:.28em; text-transform:uppercase; padding:14px 0; caret-color:var(--cyan)}
+input::placeholder{color:rgba(138,143,181,.45)}
+.btn{margin-top:16px; width:100%; padding:14px 20px; cursor:pointer; color:#000; background:var(--cyan); border:0;
+  font:800 1rem var(--font); letter-spacing:.3em; text-transform:uppercase;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px)); box-shadow:0 0 20px var(--cyan); transition:.15s}
+.btn:hover,.btn:focus-visible{background:var(--yellow); outline:none; transform:translateY(-1px)}
+.btn:disabled{opacity:.5; cursor:wait}
+.btn.ghost{clip-path:none; background:transparent; color:var(--cyan); border:1px solid var(--cyan); box-shadow:none; font-size:.8rem; letter-spacing:.2em; padding:10px}
+.btn.ghost:hover{background:var(--cyan); color:#000}
+.msg{min-height:1.5em; margin:14px 0 0; font-size:.9rem; letter-spacing:.04em; color:var(--dim)}
+.msg.err{color:var(--red); text-shadow:0 0 8px var(--red)}
+.msg.ok{color:var(--green)}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+.result{padding:6px 22px 26px; text-align:center; animation:pop .5s}
+@keyframes pop{from{opacity:0; transform:scale(.96)}}
+.r-label{margin:6px 0 6px; font-size:.78rem; letter-spacing:.22em; color:var(--green); text-shadow:0 0 8px var(--green); font-weight:600}
+.r-name{margin:0; font-size:clamp(2.4rem,11vw,4.6rem); font-weight:800; letter-spacing:.05em; text-transform:uppercase; line-height:1.15; word-break:break-word}
+.r-hint{margin:6px 0 4px; color:var(--dim); font-size:.9rem}
+
+
+/* wishlists */
+.wishes{margin-top:60px}
+.h2{margin:0; text-align:center; font-size:clamp(1.6rem,6vw,2.4rem); letter-spacing:.3em; text-transform:uppercase; color:var(--yellow); text-shadow:0 0 14px rgba(252,238,10,.6); font-weight:800}
+.h2::after{content:""; display:block; width:120px; height:3px; margin:10px auto 0; background:linear-gradient(90deg,var(--pink),var(--cyan)); box-shadow:0 0 10px var(--cyan)}
+.w-sub{text-align:center; color:var(--dim); margin:12px 0 26px}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px}
+.card{position:relative; padding:18px 18px 16px; background:rgba(10,8,26,.82); border:1px solid rgba(0,240,255,.45);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%); transition:.2s; scroll-margin:20px}
+.card:hover{border-color:var(--cyan); box-shadow:0 0 18px rgba(0,240,255,.35); transform:translateY(-2px)}
+.card h3{margin:0 0 10px; font-size:1.15rem; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); text-shadow:0 0 8px rgba(0,240,255,.6)}
+.card ul{margin:0; padding:0; list-style:none}
+.card li{position:relative; padding:5px 0 5px 20px; border-bottom:1px dashed rgba(255,255,255,.08); font-size:.95rem}
+.card li:last-child{border-bottom:0}
+.card li::before{content:"▸"; position:absolute; left:0; color:var(--pink); text-shadow:0 0 6px var(--pink)}
+.card .empty{color:var(--dim); font-style:italic}.card .empty::before{content:""}
+.card.target{border-color:var(--pink); box-shadow:0 0 26px rgba(255,43,214,.55); animation:pulse 1.8s infinite}
+.card.target h3{color:var(--pink); text-shadow:0 0 10px var(--pink)}
+.card.target h3::after{content:" ★"; color:var(--yellow)}
+@keyframes pulse{50%{box-shadow:0 0 40px rgba(255,43,214,.85)}}
+
+footer{text-align:center; margin-top:56px; color:var(--dim); font-size:.8rem; letter-spacing:.08em}
+@media (max-width:480px){.hero{padding-top:64px}.panel{clip-path:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}

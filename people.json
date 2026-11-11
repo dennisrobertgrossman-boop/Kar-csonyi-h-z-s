@@ -1,0 +1,9 @@
+[
+  { "name": "Dorci",  "partner": "Dodó",   "wishlist": [] },
+  { "name": "Dodó",   "partner": "Dorci",  "wishlist": [] },
+  { "name": "János",  "partner": "Mari",   "wishlist": [] },
+  { "name": "Mari",   "partner": "János",  "wishlist": [] },
+  { "name": "Lóri",   "partner": "Judit",  "wishlist": [] },
+  { "name": "Andris",                      "wishlist": [] },
+  { "name": "Judit",  "partner": "Lóri",   "wishlist": [] }
+]
