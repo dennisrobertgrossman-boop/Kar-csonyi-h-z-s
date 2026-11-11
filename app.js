@@ -13,7 +13,9 @@
       kicker: '// NEON NOËL PROTOKOLL', sub: 'Családi ajándéksorsolás · ',
       barTitle: 'biztonsagos_terminal.exe', label: 'ADD MEG A SZEMÉLYES KÓDODAT', btn: 'TITKOSÍTÁS FELOLDÁSA',
       rLabel: 'CÉLPONT AZONOSÍTVA — TE AJÁNDÉKOT VESZEL NEKI:', hide: 'ELREJTÉS · KÉPERNYŐ TÖRLÉSE',
-      wTitle: 'KÍVÁNSÁGLISTÁK', wSub: 'Nem tudod, mit vegyél? Nézd meg, mire vágyik mindenki.',
+      wTitle: 'KÍVÁNSÁGLISTÁK', wSub: 'Írd be, mire vágysz! A listákat bárki szerkesztheti, aki megnyitja az oldalt.',
+      wPh: 'Új kívánság…', wAdd: 'Hozzáadás', wDel: 'Törlés', wConfirm: 'Biztosan törlöd ezt a kívánságot?', wLoading: 'Betöltés…',
+      wLoadErr: 'A kívánságlistákat nem sikerült betölteni. Ellenőrizd az internetkapcsolatot.', wSaveErr: 'Nem sikerült menteni. Próbáld újra.', wFull: 'Egy listán legfeljebb 20 kívánság lehet.',
       foot: 'A kódok titkosak. Ne oszd meg a sajátodat — és ne leskelődj mások után.',
       empty: 'Még nincs kívánság megadva.', hint: n => `Nézd meg lent ${n} kívánságlistáját!`,
       bad: 'HOZZÁFÉRÉS MEGTAGADVA — ismeretlen kód.', ask: 'Adj meg egy kódot.', short: 'A kód 8 karakter hosszú (pl. ABCD-EFGH).',
@@ -24,7 +26,9 @@
       kicker: '// NEON NOËL PROTOCOL', sub: 'Family gift draw · ',
       barTitle: 'secure_terminal.exe', label: 'ENTER YOUR PERSONAL CODE', btn: 'DECRYPT',
       rLabel: 'TARGET ACQUIRED — YOU BUY A GIFT FOR:', hide: 'HIDE · CLEAR SCREEN',
-      wTitle: 'WISHLISTS', wSub: 'Stuck for ideas? Check what everyone is hoping for.',
+      wTitle: 'WISHLISTS', wSub: 'Type in what you wish for! Anyone who opens this page can edit the lists.',
+      wPh: 'New wish…', wAdd: 'Add', wDel: 'Delete', wConfirm: 'Really delete this wish?', wLoading: 'Loading…',
+      wLoadErr: 'The wishlists could not be loaded. Check your internet connection.', wSaveErr: 'Could not save. Please try again.', wFull: 'A list can hold at most 20 wishes.',
       foot: 'Codes are secret. Don’t share yours — and don’t peek at anyone else’s.',
       empty: 'No wishes added yet.', hint: n => `Scroll down to see ${n}’s wishlist!`,
       bad: 'ACCESS DENIED — unknown code.', ask: 'Please enter a code.', short: 'A code has 8 characters (e.g. ABCD-EFGH).',
@@ -70,18 +74,94 @@
     if (last) showResult(last, true);
   }
 
+  /* ---------- wishlists (shared, stored in Firebase) ---------- */
+  const DB = 'https://karacsonyi-huzas-3e71c-default-rtdb.europe-west1.firebasedatabase.app';
+  const MAX_LEN = 120, MAX_WISHES = 20;
+  let wishes = {}, wishState = 'loading'; // name -> [{id, text}]
+  const wurl = (name, id) => DB + '/wishlists' + (name ? '/' + encodeURIComponent(name) : '') + (id ? '/' + encodeURIComponent(id) : '') + '.json';
+  const wmsg = (text, cls) => { const m = $('wmsg'); m.textContent = text || ''; m.className = 'msg ' + (cls || ''); };
+
   function renderWishlists() {
     const g = $('wgrid'); g.textContent = '';
     D.people.slice().sort((a, b) => a.name.localeCompare(b.name, lang)).forEach(p => {
       const c = document.createElement('article'); c.className = 'card'; c.dataset.name = p.name;
       const h = document.createElement('h3'); h.textContent = p.name; c.appendChild(h);
-      const ul = document.createElement('ul');
-      if (p.wishlist.length) p.wishlist.forEach(w => { const li = document.createElement('li'); li.textContent = w; ul.appendChild(li); });
-      else { const li = document.createElement('li'); li.className = 'empty'; li.textContent = t('empty'); ul.appendChild(li); }
-      c.appendChild(ul); g.appendChild(c);
+      c.appendChild(document.createElement('ul'));
+      const f = document.createElement('form'); f.className = 'wform'; f.noValidate = true;
+      const inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = MAX_LEN; inp.autocomplete = 'off';
+      inp.placeholder = t('wPh'); inp.setAttribute('aria-label', t('wPh') + ' – ' + p.name); inp.setAttribute('enterkeyhint', 'done');
+      const b = document.createElement('button'); b.type = 'submit'; b.textContent = '+'; b.setAttribute('aria-label', t('wAdd') + ' – ' + p.name);
+      f.appendChild(inp); f.appendChild(b); c.appendChild(f);
+      f.addEventListener('submit', e => { e.preventDefault(); addWish(p.name, inp, b); });
+      g.appendChild(c);
     });
+    fillWishes();
     if (last) markTarget(last.receiver);
   }
+
+  function fillWishes() {
+    document.querySelectorAll('.card').forEach(c => {
+      const name = c.dataset.name, ul = c.querySelector('ul'); ul.textContent = '';
+      const p = D.people.find(x => x.name === name);
+      const items = (p.wishlist || []).map(text => ({ text })).concat(wishes[name] || []);
+      if (!items.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = t(wishState === 'loading' ? 'wLoading' : 'empty'); ul.appendChild(li); }
+      items.forEach(w => {
+        const li = document.createElement('li'); const s = document.createElement('span'); s.textContent = w.text; li.appendChild(s);
+        if (w.id) {
+          const d = document.createElement('button'); d.type = 'button'; d.className = 'del'; d.textContent = '×';
+          d.setAttribute('aria-label', t('wDel') + ': ' + w.text);
+          d.addEventListener('click', () => delWish(name, w, d));
+          li.appendChild(d);
+        }
+        ul.appendChild(li);
+      });
+    });
+    if (wishState === 'error') wmsg(t('wLoadErr'), 'err'); else if ($('wmsg').classList.contains('err') && $('wmsg').dataset.kind !== 'save') wmsg('');
+  }
+
+  async function loadWishes() {
+    try {
+      const r = await fetch(wurl(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = (await r.json()) || {}, next = {};
+      Object.keys(j).forEach(name => {
+        const o = j[name]; if (!o || typeof o !== 'object') return;
+        next[name] = Object.keys(o).sort().filter(id => typeof o[id] === 'string').map(id => ({ id, text: o[id] }));
+      });
+      wishes = next; wishState = 'ok';
+    } catch (err) { wishState = 'error'; }
+    fillWishes();
+  }
+
+  async function addWish(name, inp, btn) {
+    const text = inp.value.replace(/\s+/g, ' ').trim();
+    if (!text) { inp.focus(); return; }
+    if ((wishes[name] || []).length >= MAX_WISHES) { $('wmsg').dataset.kind = 'save'; wmsg(t('wFull'), 'err'); return; }
+    btn.disabled = true;
+    try {
+      const r = await fetch(wurl(name), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(text.slice(0, MAX_LEN)) });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      inp.value = ''; $('wmsg').dataset.kind = ''; wmsg('');
+      await loadWishes();
+    } catch (err) { $('wmsg').dataset.kind = 'save'; wmsg(t('wSaveErr'), 'err'); }
+    btn.disabled = false;
+  }
+
+  async function delWish(name, w, btn) {
+    if (!window.confirm(t('wConfirm') + '\n\n' + name + ': ' + w.text)) return;
+    btn.disabled = true;
+    try {
+      const r = await fetch(wurl(name, w.id), { method: 'DELETE' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      $('wmsg').dataset.kind = ''; wmsg('');
+      await loadWishes();
+    } catch (err) { btn.disabled = false; $('wmsg').dataset.kind = 'save'; wmsg(t('wSaveErr'), 'err'); }
+  }
+
+  // Keep lists fresh for everyone: reload every 15 s while the page is visible, and when it becomes visible again.
+  setInterval(() => { if (!document.hidden) loadWishes(); }, 15000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) loadWishes(); });
+
   function markTarget(name) {
     document.querySelectorAll('.card').forEach(c => c.classList.toggle('target', c.dataset.name === name));
   }
@@ -178,4 +258,5 @@
 
   $('year').textContent = new Date().getFullYear();
   applyLang();
+  loadWishes();
 })();
