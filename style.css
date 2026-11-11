@@ -106,6 +106,17 @@ input::placeholder{color:rgba(138,143,181,.45)}
 .card li:last-child{border-bottom:0}
 .card li::before{content:"▸"; position:absolute; left:0; color:var(--pink); text-shadow:0 0 6px var(--pink)}
 .card .empty{color:var(--dim); font-style:italic}.card .empty::before{content:""}
+.card li{display:flex; align-items:center; gap:8px; min-height:44px}
+.card li span{flex:1; min-width:0; word-break:break-word; overflow-wrap:anywhere}
+.card .del{flex:none; width:40px; height:40px; background:none; border:1px solid rgba(255,56,96,.5); color:var(--red); font:700 1.3rem/1 var(--font); cursor:pointer}
+.card .del:hover,.card .del:focus-visible{background:var(--red); color:#000; outline:none}
+.wform{display:flex; gap:8px; padding:0; margin-top:12px}
+.wform input{flex:1; min-width:0; font:400 1rem var(--font); letter-spacing:normal; text-transform:none; padding:10px 12px; border:1px solid rgba(0,240,255,.4); background:rgba(0,0,0,.45); color:#fff}
+.wform input:focus{border-color:var(--cyan); box-shadow:0 0 12px rgba(0,240,255,.4)}
+.wform button{flex:none; width:46px; min-height:44px; background:var(--pink); color:#000; border:0; font:800 1.4rem/1 var(--font); cursor:pointer; box-shadow:0 0 12px rgba(255,43,214,.5)}
+.wform button:hover,.wform button:focus-visible{background:var(--yellow); outline:none}
+.wform button:disabled,.card .del:disabled{opacity:.4; cursor:wait}
+.w-msg{text-align:center; margin:0 0 14px}
 .card.target{border-color:var(--pink); box-shadow:0 0 26px rgba(255,43,214,.55); animation:pulse 1.8s infinite}
 .card.target h3{color:var(--pink); text-shadow:0 0 10px var(--pink)}
 .card.target h3::after{content:" ★"; color:var(--yellow)}
@@ -117,3 +128,4 @@ footer{text-align:center; margin-top:56px; color:var(--dim); font-size:.8rem; le
 @media (max-width:480px){.hero{padding-top:72px}.panel{-webkit-clip-path:none; clip-path:none}}
 @media (max-width:400px){.btn{letter-spacing:.1em;font-size:.9rem}label,.r-label{letter-spacing:.1em}.kicker{letter-spacing:.18em}.sub{letter-spacing:.1em}form{padding:20px 14px 16px}.result{padding:6px 14px 22px}.h2{letter-spacing:.15em}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
+.card li::before{top:50%; transform:translateY(-50%)}
