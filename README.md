@@ -2,12 +2,17 @@
 
 Static cyberpunk-style website (works on GitHub Pages). Each person enters a personal code and sees whom they buy a gift for. Wishlists are shown at the bottom.
 
-## How it works
-- `people.json` – names and wishlists (edit this).
-- `node tools/generate.js` – draws a valid assignment (single cycle: nobody draws themselves, everyone draws once and is drawn once), creates a code per person, and writes:
-  - `data.js` – **public**, assignments encrypted (PBKDF2-SHA256 + AES-256-GCM); the code is the only key.
-  - `codes.txt` – **secret**, git-ignored: each person's code. Send each person only their own line.
-- Re-running the generator creates a **new** draw and new codes. After codes are handed out, change wishlists in `people.json` and run `node tools/generate.js --wishlists` (draw and codes stay unchanged).
+## Files
+- `people.json` – names, partners (`"partner"`, must be mutual) and wishlists.
+- `tools/generate.js` – draws and writes `data.js` (public, encrypted) and `codes.txt` (secret, git-ignored; names and codes only, no pairings).
+- `tools/verify.js` – checks the draw without revealing it.
 
-## Publish
-Commit `index.html`, `style.css`, `app.js`, `data.js`, then enable GitHub Pages (Settings → Pages → deploy from branch).
+## Rules enforced
+Nobody draws themselves or their partner; nobody draws a person who draws them back; everyone draws exactly one name and is drawn exactly once.
+
+## Workflow
+1. `node tools/generate.js` – new draw and new codes (only do this BEFORE sending codes).
+2. `node tools/verify.js` – must end with `ALL CHECKS PASSED` (add `--show` to print pairings; this spoils the surprise).
+3. Send each person only their own line from `codes.txt`.
+4. Later wishlist changes: edit `people.json`, run `node tools/generate.js --wishlists` (draw and codes stay), then `node tools/verify.js`.
+5. Commit and push `data.js` (never `codes.txt`).

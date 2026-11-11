@@ -1,86 +1,71 @@
 window.SORSOLAS = {
  "iterations": 200000,
- "salt": "AwvGgZdSz+M8Pk6ERKZgjw==",
+ "salt": "YuQiaMZZvSO4rIXYXRvIDQ==",
  "entries": [
   {
-   "id": "2566d083802f7356bacd7d647aa9cd7c",
-   "iv": "jJMkwLQdqiZaylPo",
-   "ct": "QSJTXRcGwHfRoCk66mZuQOTZ2/rfLBSy20koL6C/ln+f3V8gFzM5otrujBGAfkoKWoSIPlM="
+   "id": "19f01a1d80841404b74d8322b75ec1a2",
+   "iv": "8UEScn0oLohrOpzS",
+   "ct": "l99WvoEbyxwKWu3N/RS9CuwsqTGoLFl5iylOZOvhwkf5Wux0wRYFwmoxXF79GsgosNhN4iY="
   },
   {
-   "id": "5188210dbe0fe46f673cfd36021886fe",
-   "iv": "00C/Wg35mbUq/tj4",
-   "ct": "edmOFsD4pNHeXJnv3xyw+2Os+1WUOvQ8LkKZGEQIczIm2MJKDgs94F9ClvMX3hChbcpoIjsF"
+   "id": "4c2fc1cdf1579393738a5f148d5fea9a",
+   "iv": "ZnQ61HEOT+enp5y3",
+   "ct": "EWW7fW3IC0nqpgEjNhRJdIQmOegQBreABB9e/glN+iPFnXrcNERB/b7SdHTkB7Ey6D1T5Ow="
   },
   {
-   "id": "76cd169771c047f7a8070b0f8bfd6188",
-   "iv": "FOFHFPGr+4YC4JsS",
-   "ct": "sljWocXdg7M0jFfj1PryfaDBJdKaHywlbyi+X+Ma24kfvvRKPdb2z4TpI5TWpfS2TMWLPg=="
+   "id": "6134277ef9eaa307af4f44e93440bd45",
+   "iv": "lDtbR5N0lflx3wPq",
+   "ct": "ZzeSdsAUUM/VloenYbSE6zlhfGzvX2fF43ATWV5YkbTJde/AhR9VwzIpt7cjLLI+COH4/w=="
   },
   {
-   "id": "7fdc98dbe5494340a37a2e9feee7fed9",
-   "iv": "BqYf5NthBumQnohV",
-   "ct": "dhrSl1OWa76JHK15WNCmdQD2hvsti12kfX9RmQFWX/FyOiWrxK3syp8q+lFq4ZD6OPeo"
+   "id": "91ffdc024717cdd853ce4d2d526fce76",
+   "iv": "o4+NTCGHfXDXjwlX",
+   "ct": "A8ubF8t/xZIuyxe+gU2MIUWqLcsRi1M5L2tReB5/vWn8l9EB23bEPHQquT7oWwPQwtUb"
   },
   {
-   "id": "b00a9928081c829d50f17af9273ad54e",
-   "iv": "/2cNc308NGQ4oD1B",
-   "ct": "h2zPhggyJ3QOJrdi2WTYgrDd/oC+58riUHGaltohjoH1uJkISHa8SUcevvUxtgO8A/A="
+   "id": "a3feea1dec7d711e1ef67fb6875e498f",
+   "iv": "d+p1Uoqi8CPZsxr6",
+   "ct": "WDoebqUjFAckPO2EUVmp+rLTFow0Q7ROocoyoBPRplzjeTo/DxJ3sndLELNghUxEzEIDsFo="
   },
   {
-   "id": "f8cbcf6f8aa404dabc91e6bc660fb013",
-   "iv": "WW53gpnCkKM1Jqwo",
-   "ct": "Dy7KR3e1uCU89CocAmrwKxgubRxBAILW4SDBQKWjHwLc0RXa4iSpJpz2Sg8M66No+Aw="
+   "id": "eb7a093227b6bb80ebb97f409f0d231b",
+   "iv": "LowT84ybWmm28cnk",
+   "ct": "52cKJ3guyB6EVI/3ELKPtQfklDI5MVj27qWVptlcpvY/axNMLbCneCO575v/R6DYT1XFUhk="
+  },
+  {
+   "id": "f7b8b95721d00c297430b8877807da3e",
+   "iv": "OlLlQq9kjNPoDyaL",
+   "ct": "H6BZW1aX19YkPWMfZDJazf0Gy+VIzOQcR/+kFKtzKUSxG8Ve0ALMMVbT5QwTB9Jo/66P"
   }
  ],
  "people": [
   {
-   "name": "Anna",
-   "wishlist": [
-    "Wireless headphones",
-    "Warm socks",
-    "A book about space"
-   ]
+   "name": "Dorci",
+   "wishlist": []
   },
   {
-   "name": "Béla",
-   "wishlist": [
-    "LED desk lamp",
-    "Hot sauce set",
-    "Cinema voucher"
-   ]
+   "name": "Dodó",
+   "wishlist": []
   },
   {
-   "name": "Csilla",
-   "wishlist": [
-    "Yoga mat",
-    "Scented candles",
-    "Board game: Catan"
-   ]
+   "name": "János",
+   "wishlist": []
   },
   {
-   "name": "Dani",
-   "wishlist": [
-    "Mechanical keyboard",
-    "Energy drink pack",
-    "Retro game console"
-   ]
+   "name": "Mari",
+   "wishlist": []
   },
   {
-   "name": "Eszter",
-   "wishlist": [
-    "Sketchbook",
-    "Watercolor set",
-    "Hot chocolate"
-   ]
+   "name": "Lóri",
+   "wishlist": []
   },
   {
-   "name": "Feri",
-   "wishlist": [
-    "Cooking apron",
-    "Craft beer",
-    "Power bank"
-   ]
+   "name": "Andris",
+   "wishlist": []
+  },
+  {
+   "name": "Judit",
+   "wishlist": []
   }
  ]
 };

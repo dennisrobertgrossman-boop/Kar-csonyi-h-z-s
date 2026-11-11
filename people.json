@@ -1,8 +1,9 @@
 [
-  { "name": "Anna",   "wishlist": ["Wireless headphones", "Warm socks", "A book about space"] },
-  { "name": "Béla",   "wishlist": ["LED desk lamp", "Hot sauce set", "Cinema voucher"] },
-  { "name": "Csilla", "wishlist": ["Yoga mat", "Scented candles", "Board game: Catan"] },
-  { "name": "Dani",   "wishlist": ["Mechanical keyboard", "Energy drink pack", "Retro game console"] },
-  { "name": "Eszter", "wishlist": ["Sketchbook", "Watercolor set", "Hot chocolate"] },
-  { "name": "Feri",   "wishlist": ["Cooking apron", "Craft beer", "Power bank"] }
+  { "name": "Dorci",  "partner": "Dodó",   "wishlist": [] },
+  { "name": "Dodó",   "partner": "Dorci",  "wishlist": [] },
+  { "name": "János",  "partner": "Mari",   "wishlist": [] },
+  { "name": "Mari",   "partner": "János",  "wishlist": [] },
+  { "name": "Lóri",   "partner": "Judit",  "wishlist": [] },
+  { "name": "Andris",                      "wishlist": [] },
+  { "name": "Judit",  "partner": "Lóri",   "wishlist": [] }
 ]

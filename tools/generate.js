@@ -29,14 +29,26 @@ if (process.argv.includes('--wishlists')) {
 const ITER = 200000;
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I, O, 0, 1
 
-// Fisher-Yates with a cryptographic RNG.
-const order = names.slice();
-for (let i = order.length - 1; i > 0; i--) {
-  const j = crypto.randomInt(i + 1);
-  [order[i], order[j]] = [order[j], order[i]];
+// Partners may never draw each other.
+const partnerOf = {};
+for (const p of people) {
+  if (!p.partner) continue;
+  const q = people.find(x => x.name.trim() === p.partner.trim());
+  if (!q || (q.partner || '').trim() !== p.name.trim()) throw new Error(`Partner link for ${p.name} must exist and be mutual.`);
+  partnerOf[p.name.trim()] = p.partner.trim();
 }
-// One single cycle: order[i] gives to order[i+1]. Nobody draws themselves,
-// everybody gives exactly once and is drawn exactly once.
+// Random shuffle (Fisher-Yates, cryptographic RNG) repeated until no two neighbours are partners.
+// One single cycle: order[i] gives to order[i+1]. Nobody draws themselves, everybody gives
+// exactly once and is drawn exactly once. (No two people draw each other either.)
+let order, tries = 0;
+do {
+  if (++tries > 100000) throw new Error('No valid draw exists for these constraints.');
+  order = names.slice();
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = crypto.randomInt(i + 1);
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+} while (order.some((g, i) => partnerOf[g] === order[(i + 1) % order.length]));
 const pairs = order.map((giver, i) => ({ giver, receiver: order[(i + 1) % order.length] }));
 
 const newCode = () => {
@@ -60,7 +72,7 @@ for (const pair of pairs) {
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
   const ct = Buffer.concat([cipher.update(JSON.stringify(pair), 'utf8'), cipher.final(), cipher.getAuthTag()]);
   entries.push({ id, iv: iv.toString('base64'), ct: ct.toString('base64') });
-  codeLines.push(`${pair.giver.padEnd(20)} ${code}   ->  ${pair.receiver}`);
+  codeLines.push(`${pair.giver.padEnd(20)} ${code}`);
 }
 entries.sort((a, b) => a.id.localeCompare(b.id)); // hide the draw order
 
@@ -72,5 +84,5 @@ const data = {
 };
 fs.writeFileSync(path.join(root, 'data.js'), 'window.SORSOLAS = ' + JSON.stringify(data, null, 1) + ';\n');
 fs.writeFileSync(path.join(root, 'codes.txt'),
-  '# SECRET - do not publish. Name / personal code / drawn person (for your own checking)\n' + codeLines.join('\n') + '\n');
+  '# SECRET - do not publish. Name / personal code. (Pairings are deliberately NOT listed.)\n' + codeLines.join('\n') + '\n');
 console.log(`Done: ${people.length} people drawn. data.js written (public), codes.txt written (secret).`);
