@@ -6,6 +6,8 @@
   <title>Neon Noël – Karácsonyi sorsolás</title>
   <meta name="description" content="Family Christmas gift draw – enter your personal code.">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#07060f">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2307060f'/%3E%3Cpath d='M32 8 L50 30 H40 L52 46 H12 L24 30 H14 Z' fill='none' stroke='%2300f0ff' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,6 +16,7 @@
   <div class="scanlines" aria-hidden="true"></div>
   <div class="floor" aria-hidden="true"></div>
 
+  <noscript><p style="position:relative;z-index:9;text-align:center;color:#ff3860;padding:20px">JavaScript szükséges / JavaScript is required.</p></noscript>
   <button id="lang" class="lang" type="button" aria-label="Language / Nyelv">EN</button>
 
   <header class="hero">
@@ -39,7 +42,7 @@
         <label for="code" data-i18n="label">ENTER YOUR PERSONAL CODE</label>
         <div class="row">
           <span class="prompt" aria-hidden="true">&gt;_</span>
-          <input id="code" name="code" type="text" inputmode="text" maxlength="12" spellcheck="false"
+          <input id="code" name="code" type="text" inputmode="text" maxlength="24" spellcheck="false"
                  autocapitalize="characters" autocorrect="off" placeholder="XXXX-XXXX" required>
         </div>
         <button id="go" class="btn" type="submit"><span data-i18n="btn">DECRYPT</span></button>

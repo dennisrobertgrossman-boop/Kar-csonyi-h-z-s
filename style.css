@@ -110,5 +110,7 @@ input::placeholder{color:rgba(138,143,181,.45)}
 @keyframes pulse{50%{box-shadow:0 0 40px rgba(255,43,214,.85)}}
 
 footer{text-align:center; margin-top:56px; color:var(--dim); font-size:.8rem; letter-spacing:.08em}
+.btn,label,.r-label,.msg{overflow-wrap:anywhere}
 @media (max-width:480px){.hero{padding-top:64px}.panel{clip-path:none}}
+@media (max-width:400px){.btn{letter-spacing:.1em;font-size:.9rem}label,.r-label{letter-spacing:.1em}.kicker{letter-spacing:.18em}.sub{letter-spacing:.1em}form{padding:20px 14px 16px}.result{padding:6px 14px 22px}.h2{letter-spacing:.15em}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
