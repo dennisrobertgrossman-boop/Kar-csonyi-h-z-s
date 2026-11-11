@@ -7,6 +7,7 @@ const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const root = path.join(__dirname, '..');
 const people = JSON.parse(fs.readFileSync(path.join(root, 'people.json'), 'utf8'));
 const D = JSON.parse(fs.readFileSync(path.join(root, 'data.js'), 'utf8').replace(/^window\.SORSOLAS = /, '').replace(/;\s*$/, ''));
+if (!fs.existsSync(path.join(root, 'codes.txt'))) { console.error('codes.txt not found. It exists only on the computer where the draw was generated.'); process.exit(2); }
 const lines = fs.readFileSync(path.join(root, 'codes.txt'), 'utf8').split('\n').filter(l => l && !l.startsWith('#'));
 const show = process.argv.includes('--show');
 const problems = [];

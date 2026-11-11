@@ -26,6 +26,19 @@ if (process.argv.includes('--wishlists')) {
   process.exit(0);
 }
 
+// SAFETY: a draw already exists. Making a new one invalidates every code already handed out.
+const dataFile = path.join(root, 'data.js'), codesFile = path.join(root, 'codes.txt');
+if (fs.existsSync(dataFile) && /"entries"\s*:\s*\[\s*\{/.test(fs.readFileSync(dataFile, 'utf8'))) {
+  if (!process.argv.includes('--new-draw')) {
+    console.error('REFUSED: a draw already exists (data.js). A new draw would make ALL issued codes useless.\n' +
+      'To change wishlists only:  node tools/generate.js --wishlists\n' +
+      'To really start over:      node tools/generate.js --new-draw   (old files are saved as *.bak)');
+    process.exit(1);
+  }
+  fs.copyFileSync(dataFile, dataFile + '.bak');
+  if (fs.existsSync(codesFile)) fs.copyFileSync(codesFile, codesFile + '.bak');
+}
+
 const ITER = 200000;
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I, O, 0, 1
 

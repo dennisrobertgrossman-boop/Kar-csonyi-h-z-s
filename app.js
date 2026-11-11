@@ -2,32 +2,38 @@
   'use strict';
   const D = window.SORSOLAS;
   const $ = id => document.getElementById(id);
+  if (!D || !Array.isArray(D.entries) || !Array.isArray(D.people)) {
+    $('go').disabled = true; $('code').disabled = true;
+    $('msg').textContent = 'Hiba / Error: data.js could not be loaded. Reload the page. / Töltsd újra az oldalt.';
+    $('msg').className = 'msg err';
+    return;
+  }
   const T = {
     hu: {
       kicker: '// NEON NOËL PROTOKOLL', sub: 'Családi ajándéksorsolás · ',
       barTitle: 'biztonsagos_terminal.exe', label: 'ADD MEG A SZEMÉLYES KÓDODAT', btn: 'TITKOSÍTÁS FELOLDÁSA',
-      rLabel: 'CÉLPONT AZONOSÍTVA — NEKED AJÁNDÉKOT KELL VENNED', hide: 'ELREJTÉS · KÉPERNYŐ TÖRLÉSE',
+      rLabel: 'CÉLPONT AZONOSÍTVA — TE AJÁNDÉKOT VESZEL NEKI:', hide: 'ELREJTÉS · KÉPERNYŐ TÖRLÉSE',
       wTitle: 'KÍVÁNSÁGLISTÁK', wSub: 'Nem tudod, mit vegyél? Nézd meg, mire vágyik mindenki.',
       foot: 'A kódok titkosak. Ne oszd meg a sajátodat — és ne leskelődj mások után.',
       empty: 'Még nincs kívánság megadva.', hint: n => `Nézd meg lent ${n} kívánságlistáját!`,
-      bad: 'HOZZÁFÉRÉS MEGTAGADVA — ismeretlen kód.', ask: 'Adj meg egy kódot.',
+      bad: 'HOZZÁFÉRÉS MEGTAGADVA — ismeretlen kód.', ask: 'Adj meg egy kódot.', short: 'A kód 8 karakter hosszú (pl. ABCD-EFGH).',
       work: 'Dekódolás…', ok: 'Hozzáférés engedélyezve.', nocrypto: 'Ez a böngésző nem támogatja a titkosítás feloldását (HTTPS vagy modern böngésző kell).',
       to: 'EN',
     },
     en: {
       kicker: '// NEON NOËL PROTOCOL', sub: 'Family gift draw · ',
       barTitle: 'secure_terminal.exe', label: 'ENTER YOUR PERSONAL CODE', btn: 'DECRYPT',
-      rLabel: 'TARGET ACQUIRED — YOU BUY A GIFT FOR', hide: 'HIDE · CLEAR SCREEN',
+      rLabel: 'TARGET ACQUIRED — YOU BUY A GIFT FOR:', hide: 'HIDE · CLEAR SCREEN',
       wTitle: 'WISHLISTS', wSub: 'Stuck for ideas? Check what everyone is hoping for.',
       foot: 'Codes are secret. Don’t share yours — and don’t peek at anyone else’s.',
       empty: 'No wishes added yet.', hint: n => `Scroll down to see ${n}’s wishlist!`,
-      bad: 'ACCESS DENIED — unknown code.', ask: 'Please enter a code.',
+      bad: 'ACCESS DENIED — unknown code.', ask: 'Please enter a code.', short: 'A code has 8 characters (e.g. ABCD-EFGH).',
       work: 'Decrypting…', ok: 'Access granted.', nocrypto: 'This browser cannot decrypt (HTTPS or a modern browser is required).',
       to: 'HU',
     },
   };
   let lang = 'hu', last = null;
-  try { lang = localStorage.getItem('lang') || (/^en/i.test(navigator.language) ? 'en' : 'hu'); } catch (e) {}
+  try { const s = localStorage.getItem('lang'); if (s === 'en' || s === 'hu') lang = s; } catch (e) {}
   const t = k => T[lang][k];
 
   const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -82,18 +88,21 @@
 
   const GLYPHS = '█▓▒░#@$%&*+=?<>/\\ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = null;
+  const stopScramble = () => { if (timer) { clearInterval(timer); timer = null; } };
   function scramble(el, final, done) {
+    stopScramble();
     if (reduce) { setText(el, final); done && done(); return; }
-    const total = 28; let f = 0;
-    const iv = setInterval(() => {
+    const total = 18; let f = 0;
+    const iv = timer = setInterval(() => {
       f++;
       const reveal = Math.floor(final.length * f / total);
       let s = '';
       for (let i = 0; i < final.length; i++)
         s += i < reveal || final[i] === ' ' ? final[i] : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
       setText(el, s);
-      if (f >= total) { clearInterval(iv); setText(el, final); done && done(); }
-    }, 45);
+      if (f >= total) { stopScramble(); setText(el, final); done && done(); }
+    }, 40);
   }
 
   function showResult(res, instant) {
@@ -101,10 +110,11 @@
     $('result').hidden = false;
     $('rhint').textContent = t('hint')(res.receiver);
     markTarget(res.receiver);
-    if (instant) setText($('rname'), res.receiver); else scramble($('rname'), res.receiver);
+    $('rname').setAttribute('aria-label', res.receiver);
+    if (instant) { stopScramble(); setText($('rname'), res.receiver); } else scramble($('rname'), res.receiver);
   }
   function clearResult() {
-    last = null; $('result').hidden = true; setText($('rname'), ' '); markTarget(null);
+    stopScramble(); last = null; $('result').hidden = true; $('rname').removeAttribute('aria-label'); setText($('rname'), ' '); markTarget(null);
     $('code').value = ''; $('msg').textContent = ''; $('msg').className = 'msg'; $('code').focus();
   }
 
@@ -116,18 +126,21 @@
     if (v.length > 4) v = v.slice(0, 4) + '-' + v.slice(4);
     e.target.value = v;
   });
+  let busy = false;
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
+    if (busy) return;
     const v = $('code').value.trim();
     if (!v) { msg(t('ask'), 'err'); return; }
+    if (v.replace(/[^A-Z0-9]/gi, '').length !== 8) { msg(t('short'), 'err'); return; }
     if (!(window.crypto && crypto.subtle)) { msg(t('nocrypto'), 'err'); return; }
-    $('go').disabled = true; msg(t('work'));
+    busy = true; $('go').disabled = true; msg(t('work'));
     let res = null;
     try { res = await decrypt(v); } catch (err) { res = null; }
-    $('go').disabled = false;
+    busy = false; $('go').disabled = false;
     if (res) { msg(t('ok'), 'ok'); showResult(res); $('result').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
     else {
-      last = null; $('result').hidden = true; markTarget(null);
+      stopScramble(); last = null; $('result').hidden = true; markTarget(null);
       msg(t('bad'), 'err'); const r = document.querySelector('.row'); r.classList.remove('shake'); void r.offsetWidth; r.classList.add('shake');
     }
   });
@@ -142,13 +155,16 @@
   (function rain() {
     if (reduce) return;
     const cv = $('rain'), cx = cv.getContext('2d'); let w, h, cols, drops;
-    const chars = '❄❅❆*+·0123456789';
+    const chars = '*+·0123456789'.split('').concat(['\u2744\uFE0E', '\u2745\uFE0E', '\u2746\uFE0E']);
+    let lastW = 0;
     function size() {
+      if (innerWidth === lastW && drops) return; lastW = innerWidth;
       w = cv.width = innerWidth; h = cv.height = innerHeight;
       cols = Math.ceil(w / 26); drops = Array.from({ length: cols }, () => Math.random() * -50);
     }
     size(); addEventListener('resize', size);
     setInterval(() => {
+      if (document.hidden) return;
       cx.fillStyle = 'rgba(7,6,15,.14)'; cx.fillRect(0, 0, w, h);
       cx.font = '16px "Segoe UI", sans-serif';
       drops.forEach((y, i) => {

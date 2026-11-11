@@ -3,20 +3,22 @@
   --cyan:#00f0ff; --pink:#ff2bd6; --yellow:#fcee0a; --green:#39ff88; --red:#ff3860;
   --font:"Segoe UI","Segoe UI Variable",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth; background:var(--bg); -webkit-text-size-adjust:100%; text-size-adjust:100%; color-scheme:dark}
+button,input{touch-action:manipulation; -webkit-appearance:none; appearance:none; border-radius:0}
 body{
   margin:0; min-height:100vh; color:var(--ink); font-family:var(--font); line-height:1.5;
   background:
     radial-gradient(900px 500px at 15% -10%, rgba(255,43,214,.20), transparent 60%),
     radial-gradient(900px 600px at 95% 5%, rgba(0,240,255,.16), transparent 60%),
     linear-gradient(var(--bg2), var(--bg));
-  background-color:var(--bg); overflow-x:hidden; padding:0 16px 40px;
+  background-color:var(--bg); overflow-x:hidden;
+  padding:0 max(16px, env(safe-area-inset-right)) max(40px, calc(env(safe-area-inset-bottom) + 24px)) max(16px, env(safe-area-inset-left));
 }
-#rain{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:.55}
-.scanlines{position:fixed; inset:0; z-index:5; pointer-events:none;
-  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.035) 0 1px, transparent 1px 3px); mix-blend-mode:overlay}
-.scanlines::after{content:""; position:absolute; inset:0;
+#rain{position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:.55}
+.scanlines{position:fixed; top:0; left:0; right:0; bottom:0; z-index:5; pointer-events:none;
+  background:repeating-linear-gradient(to bottom, rgba(255,255,255,.03) 0 1px, transparent 1px 3px)}
+.scanlines::after{content:""; position:absolute; top:0; left:0; right:0; bottom:0;
   background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55))}
 .floor{position:fixed; left:-50%; right:-50%; bottom:0; height:42vh; z-index:0; pointer-events:none;
   background:
@@ -28,9 +30,9 @@ body{
   animation:floor 3s linear infinite}
 @keyframes floor{to{background-position:0 0, 0 0, 0 50px}}
 
-.lang{position:fixed; top:14px; right:14px; z-index:10; background:rgba(7,6,15,.7); color:var(--cyan);
-  border:1px solid var(--cyan); padding:6px 12px; font:600 .8rem var(--font); letter-spacing:.15em; cursor:pointer;
-  clip-path:polygon(0 0,100% 0,100% 70%,85% 100%,0 100%)}
+.lang{position:absolute; top:max(12px, env(safe-area-inset-top)); right:max(12px, env(safe-area-inset-right)); z-index:10; background:rgba(7,6,15,.85); color:var(--cyan);
+  border:1px solid var(--cyan); min-width:48px; min-height:44px; padding:6px 14px; font:600 .8rem var(--font); letter-spacing:.15em; cursor:pointer;
+  -webkit-clip-path:polygon(0 0,100% 0,100% 70%,85% 100%,0 100%); clip-path:polygon(0 0,100% 0,100% 70%,85% 100%,0 100%)}
 .lang:hover,.lang:focus-visible{background:var(--cyan); color:#000; outline:none}
 
 main,.hero,footer{position:relative; z-index:2; max-width:920px; margin:0 auto}
@@ -48,7 +50,7 @@ h1{margin:.1em 0 .05em; font-size:clamp(2.4rem,9vw,5rem); font-weight:800; lette
 
 /* glitch text */
 .glitch{position:relative; color:#fff; text-shadow:0 0 12px var(--cyan),0 0 32px rgba(0,240,255,.6)}
-.glitch::before,.glitch::after{content:attr(data-text); position:absolute; inset:0; overflow:hidden; pointer-events:none}
+.glitch::before,.glitch::after{content:attr(data-text); position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; pointer-events:none}
 .glitch::before{color:var(--pink); text-shadow:none; transform:translate(2px,0); clip-path:inset(0 0 60% 0); opacity:0; animation:g1 3.2s infinite steps(1)}
 .glitch::after{color:var(--cyan); text-shadow:none; transform:translate(-2px,0); clip-path:inset(60% 0 0 0); opacity:0; animation:g2 2.7s infinite steps(1)}
 @keyframes g1{0%,88%,100%{transform:translate(0); opacity:0}90%{opacity:.9;transform:translate(-4px,1px); clip-path:inset(10% 0 55% 0)}94%{opacity:.9; transform:translate(4px,-1px); clip-path:inset(40% 0 20% 0)}96%{opacity:0}}
@@ -57,7 +59,7 @@ h1{margin:.1em 0 .05em; font-size:clamp(2.4rem,9vw,5rem); font-weight:800; lette
 /* panel */
 .panel{position:relative; margin:22px auto 0; max-width:620px; background:rgba(10,8,26,.82);
   border:1px solid var(--cyan); box-shadow:0 0 0 1px rgba(0,240,255,.15),0 0 30px rgba(0,240,255,.25), inset 0 0 40px rgba(0,240,255,.05);
-  clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)); backdrop-filter:blur(4px)}
+  -webkit-clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)); clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px))}
 .panel-bar{display:flex; align-items:center; gap:7px; padding:9px 14px; background:linear-gradient(90deg,rgba(0,240,255,.2),rgba(255,43,214,.15)); border-bottom:1px solid rgba(0,240,255,.4)}
 .dot{width:9px; height:9px; border-radius:50%; background:var(--pink); box-shadow:0 0 6px var(--pink)}
 .dot:nth-child(2){background:var(--yellow); box-shadow:0 0 6px var(--yellow)}.dot:nth-child(3){background:var(--green); box-shadow:0 0 6px var(--green)}
@@ -71,10 +73,10 @@ input{flex:1; min-width:0; background:none; border:0; outline:0; color:#fff; fon
 input::placeholder{color:rgba(138,143,181,.45)}
 .btn{margin-top:16px; width:100%; padding:14px 20px; cursor:pointer; color:#000; background:var(--cyan); border:0;
   font:800 1rem var(--font); letter-spacing:.3em; text-transform:uppercase;
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px)); box-shadow:0 0 20px var(--cyan); transition:.15s}
+  -webkit-clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px)); clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px)); box-shadow:0 0 20px var(--cyan); transition:.15s}
 .btn:hover,.btn:focus-visible{background:var(--yellow); outline:none; transform:translateY(-1px)}
 .btn:disabled{opacity:.5; cursor:wait}
-.btn.ghost{clip-path:none; background:transparent; color:var(--cyan); border:1px solid var(--cyan); box-shadow:none; font-size:.8rem; letter-spacing:.2em; padding:10px}
+.btn.ghost{min-height:46px; -webkit-clip-path:none; clip-path:none; background:transparent; color:var(--cyan); border:1px solid var(--cyan); box-shadow:none; font-size:.8rem; letter-spacing:.2em; padding:10px}
 .btn.ghost:hover{background:var(--cyan); color:#000}
 .msg{min-height:1.5em; margin:14px 0 0; font-size:.9rem; letter-spacing:.04em; color:var(--dim)}
 .msg.err{color:var(--red); text-shadow:0 0 8px var(--red)}
@@ -96,7 +98,7 @@ input::placeholder{color:rgba(138,143,181,.45)}
 .w-sub{text-align:center; color:var(--dim); margin:12px 0 26px}
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px}
 .card{position:relative; padding:18px 18px 16px; background:rgba(10,8,26,.82); border:1px solid rgba(0,240,255,.45);
-  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%); transition:.2s; scroll-margin:20px}
+  -webkit-clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%); clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%); transition:.2s; scroll-margin:20px}
 .card:hover{border-color:var(--cyan); box-shadow:0 0 18px rgba(0,240,255,.35); transform:translateY(-2px)}
 .card h3{margin:0 0 10px; font-size:1.15rem; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); text-shadow:0 0 8px rgba(0,240,255,.6)}
 .card ul{margin:0; padding:0; list-style:none}
@@ -110,5 +112,8 @@ input::placeholder{color:rgba(138,143,181,.45)}
 @keyframes pulse{50%{box-shadow:0 0 40px rgba(255,43,214,.85)}}
 
 footer{text-align:center; margin-top:56px; color:var(--dim); font-size:.8rem; letter-spacing:.08em}
-@media (max-width:480px){.hero{padding-top:64px}.panel{clip-path:none}}
+.btn,label,.r-label,.msg{word-break:break-word; overflow-wrap:anywhere}
+@media (max-width:600px){.floor{animation:none; height:30vh}}
+@media (max-width:480px){.hero{padding-top:72px}.panel{-webkit-clip-path:none; clip-path:none}}
+@media (max-width:400px){.btn{letter-spacing:.1em;font-size:.9rem}label,.r-label{letter-spacing:.1em}.kicker{letter-spacing:.18em}.sub{letter-spacing:.1em}form{padding:20px 14px 16px}.result{padding:6px 14px 22px}.h2{letter-spacing:.15em}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}

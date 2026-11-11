@@ -1,2 +1,3 @@
 # Contains every person's secret code and the full draw result – NEVER publish.
 codes.txt
+*.bak
